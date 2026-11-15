@@ -1,0 +1,13 @@
+metric_id,metric,description,unit
+1,Balance,Average balance over the period,amount
+2,Purchases,Total purchases over the period,amount
+3,One-off purchases,Purchases paid in one go,amount
+4,Instalment purchases,Purchases paid in instalments,amount
+5,Cash advances,Cash withdrawn on the card,amount
+6,Credit limit,Credit limit,amount
+7,Payments,Total payments made,amount
+8,Utilization,Balance ÷ credit limit,percent
+9,Purchase frequency,Share of months with purchases,percent
+10,Cash-advance frequency,Share of months with a cash advance,percent
+11,Full-payment rate,Share of months the full balance was paid,percent
+12,Purchase transactions,Number of purchase transactions,count

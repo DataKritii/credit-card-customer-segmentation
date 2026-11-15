@@ -1,0 +1,41 @@
+{
+  "name": "DataKritii",
+  "dataColors": [
+    "#2E7D5B",
+    "#2C3E50",
+    "#95A5A6",
+    "#D4A20B",
+    "#B9603A",
+    "#7B5EA7",
+    "#5D8AA8",
+    "#B2A59B"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#2C3E50",
+  "tableAccent": "#D4A20B",
+  "good": "#2E7D5B",
+  "neutral": "#D4A20B",
+  "bad": "#B9603A",
+  "maximum": "#B9603A",
+  "center": "#FFFFFF",
+  "minimum": "#2C6E9E",
+  "textClasses": {
+    "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 28, "color": "#2C3E50" },
+    "title": { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#2C3E50" },
+    "header": { "fontFace": "Segoe UI Semibold", "fontSize": 11, "color": "#2C3E50" },
+    "label": { "fontFace": "Segoe UI", "fontSize": 10, "color": "#55636F" }
+  },
+  "visualStyles": {
+    "page": {
+      "*": {
+        "background": [{ "color": { "solid": { "color": "#FEF9E7" } }, "transparency": 0 }]
+      }
+    },
+    "*": {
+      "*": {
+        "background": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }],
+        "title": [{ "fontColor": { "solid": { "color": "#2C3E50" } }, "fontFamily": "Segoe UI Semibold", "fontSize": 12 }]
+      }
+    }
+  }
+}

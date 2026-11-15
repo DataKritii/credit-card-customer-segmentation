@@ -1,0 +1,7 @@
+segment_id,segment_name,description,recommended_action,risk_view,color_hex,customers
+1,Transactors,Buy often and pay the full balance almost every month; carry almost no balance.,"Rewards and premium card upgrades; little interest income, so keep them through value, not price.",Low,#2E7D5B,1239
+2,High-limit spenders,"High credit limits and the largest purchases, but use only a small part of their limit.",Spend-based offers and instalment plans for large purchases; good candidates for retention efforts.,Low to moderate,#2C3E50,1532
+3,Light users,Small balances and occasional small purchases; the card isn't their main one.,"Activation campaigns (first-purchase bonus, digital wallet set-up); review dormant accounts.",Low,#95A5A6,1551
+4,Heavy all-rounders,"The highest balances: they buy regularly, take cash advances and carry a balance.","Most profitable but exposed; balance-transfer and instalment offers, with close credit monitoring.",Moderate to high,#D4A20B,1084
+5,Near-limit revolvers,"Low limits used almost to the maximum, carrying a balance month to month.",Early-warning monitoring and payment-plan outreach; review before any limit increase.,High,#B9603A,1153
+6,Cash-advance reliant,"Rarely buy anything; use the card mainly to withdraw cash, at high interest.","Offer lower-cost alternatives (personal loan, overdraft); monitor for financial stress.",High,#7B5EA7,2390

@@ -1,0 +1,141 @@
+// =====================================================================
+// DataKritii | Credit card customer segmentation: DAX measures
+// =====================================================================
+// How to use: in Power BI Desktop, create an empty table called _Measures
+// (Home > Enter data > name it _Measures > Load), select it, then for each
+// measure below: Home > New measure, paste ONE measure (name = expression),
+// press Enter, and set the format shown in the comment above it.
+//
+// Tables (from powerbi/data): customers, segments, metrics, segment_profile, k_selection
+// Relationships: customers[segment_id]       -> segments[segment_id]  (many-to-one)
+//                segment_profile[segment_id] -> segments[segment_id]  (many-to-one)
+//                segment_profile[metric_id]  -> metrics[metric_id]    (many-to-one)
+// =====================================================================
+
+
+// ---------- 1. Counts and shares ----------
+
+// Format: Whole number, thousands separator
+Customers = COUNTROWS ( customers )
+
+// Format: Percentage, 1 decimal
+// Share of ALL customers: REMOVEFILTERS ignores any segment filter for the denominator
+Share of Customers =
+DIVIDE ( [Customers], CALCULATE ( [Customers], REMOVEFILTERS ( segments ) ) )
+
+// Format: Whole number
+Segments = DISTINCTCOUNT ( customers[segment_id] )
+
+
+// ---------- 2. Behaviour (respond to any segment filter) ----------
+
+// Format: Currency, 0 decimals
+Avg Balance = AVERAGE ( customers[balance] )
+
+// Format: Currency, 0 decimals
+Avg Purchases = AVERAGE ( customers[purchases] )
+
+// Format: Currency, 0 decimals
+Avg Cash Advance = AVERAGE ( customers[cash_advance] )
+
+// Format: Currency, 0 decimals
+Avg Credit Limit = AVERAGE ( customers[credit_limit] )
+
+// Format: Percentage, 0 decimals
+// Typical customer's utilization (median is robust to a few over-limit accounts)
+Median Utilization = MEDIAN ( customers[utilization] )
+
+// Format: Percentage, 0 decimals
+// Portfolio view: total balance / total limit (weights big accounts more)
+Portfolio Utilization =
+DIVIDE ( SUM ( customers[balance] ), SUM ( customers[credit_limit] ) )
+
+// Format: Percentage, 0 decimals
+% Using Cash Advance = AVERAGE ( customers[uses_cash_advance] )
+
+// Format: Percentage, 0 decimals
+% Usually Pay in Full = AVERAGE ( customers[usually_pays_in_full] )
+
+// Format: Currency, 0 decimals (display units: Millions)
+Total Balance = SUM ( customers[balance] )
+
+// Format: Percentage, 1 decimal
+Share of Balance =
+DIVIDE ( [Total Balance], CALCULATE ( [Total Balance], REMOVEFILTERS ( segments ) ) )
+
+// Format: Decimal, 2 decimals
+// How typical customers are of their segment (lower = closer to the segment centre)
+Avg Distance to Centre = AVERAGE ( customers[distance_to_centre] )
+
+
+// ---------- 3. Same measures for ALL customers (for "segment vs all" comparisons) ----------
+
+// Format: Percentage, 0 decimals
+Median Utilization (All) = CALCULATE ( [Median Utilization], REMOVEFILTERS ( segments ) )
+
+// Format: Percentage, 0 decimals
+% Using Cash Advance (All) = CALCULATE ( [% Using Cash Advance], REMOVEFILTERS ( segments ) )
+
+// Format: Percentage, 0 decimals
+% Usually Pay in Full (All) = CALCULATE ( [% Usually Pay in Full], REMOVEFILTERS ( segments ) )
+
+// Format: Currency, 0 decimals
+Avg Purchases (All) = CALCULATE ( [Avg Purchases], REMOVEFILTERS ( segments ) )
+
+// Format: Currency, 0 decimals
+Avg Balance (All) = CALCULATE ( [Avg Balance], REMOVEFILTERS ( segments ) )
+
+
+// ---------- 4. Selected segment text (for persona cards) ----------
+
+// Format: Text
+Selected Segment =
+SELECTEDVALUE ( segments[segment_name], "All customers" )
+
+// Format: Text
+Selected Description =
+SELECTEDVALUE ( segments[description], "Select one segment to see its persona." )
+
+// Format: Text
+Selected Action =
+SELECTEDVALUE ( segments[recommended_action], "Select one segment to see the suggested action." )
+
+// Format: Text
+Selected Risk View =
+SELECTEDVALUE ( segments[risk_view], "–" )
+
+// Format: Text
+// Used for conditional formatting: Format > Colors > fx > Format style: Field value > Segment Color
+Segment Color =
+SELECTEDVALUE ( segments[color_hex], "#2C3E50" )
+
+// Format: Text
+// Dynamic page subtitle
+Selection Summary =
+VAR n = [Customers]
+VAR share = [Share of Customers]
+RETURN
+    [Selected Segment] & ": " & FORMAT ( n, "#,0" ) & " customers (" & FORMAT ( share, "0%" ) & " of all)"
+
+
+// ---------- 5. Segment profile matrix (heatmap) ----------
+
+// Format: Decimal, 1 decimal
+// How many standard deviations the segment's average is above (+) or below (-) the overall average
+Profile Z-Score = AVERAGE ( segment_profile[z_score] )
+
+// Format: Decimal, 2 decimals (used in tooltips)
+Profile Segment Mean = AVERAGE ( segment_profile[segment_mean] )
+
+// Format: Decimal, 2 decimals (used in tooltips)
+Profile Overall Mean = AVERAGE ( segment_profile[overall_mean] )
+
+
+// ---------- 6. Method page ----------
+
+// Format: Whole number
+Chosen k = 6
+
+// Format: Decimal, 3 decimals
+Silhouette at Chosen k =
+CALCULATE ( MAX ( k_selection[silhouette] ), k_selection[k] = 6 )
