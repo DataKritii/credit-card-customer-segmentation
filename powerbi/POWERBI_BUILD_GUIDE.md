@@ -74,7 +74,7 @@ Allow 3–5 hours. Save your work often (**Ctrl + S**).
 
 ## Part 3: Apply the theme and set up pages
 
-1. **View → Themes → Browse for themes** → select `DataKritii_theme.json`.
+1. **Design → Import theme** (in older versions: **View → Themes → Browse for themes**) → select `DataKritii_theme.json`.
    Pages get the ivory background, visuals get white cards, and the colour palette starts with the segment colours.
 2. Rename **Page 1** to `Overview`, and add four more pages: `Segment profiles`, `Segment explorer`, `Personas & actions`, `Method`.
 3. Keep the default page size (16:9).
@@ -189,10 +189,15 @@ The layout sketches show roughly where each visual goes.
 
 1. **Slicer:** field `segments[segment_name]`. Format → Slicer settings → Style: **Tile**; Selection: **Multi-select with Ctrl** on, **Show "Select all"** on.
 2. **Selection summary:** a **Card** with the `Selection Summary` measure. It reads, e.g., *Near-limit revolvers: 1,153 customers (13% of all)*.
-3. **Scatter chart:** X-axis `customers[pca_1]` (set to **Don't summarize**), Y-axis `customers[pca_2]` (**Don't summarize**), Legend `segments[segment_name]`, Values `customers[customer_id]`.
-   - Format → **Markers → Colors**: set each segment's colour from the table in Part 3.
+3. **Scatter chart:** Values `customers[customer_id]`, X-axis `customers[pca_1]`, Y-axis `customers[pca_2]`, Legend `segments[segment_name]`.
+   - Set both axes to **Average** (arrow next to the field → Average). With `customer_id` in Values, current Power BI versions don't allow *Don't summarize* ("Remove Values to display x- and y-axis pairs"). Each customer has one row, so the average is just that customer's own value: one point per customer.
+   - Don't remove `customer_id` from Values to get round the error: Power BI then groups the unsummarized values into numeric ranges.
+   - **Colour by segment with the `Customer Color` measure**, not Markers → Colors (with `customer_id` in Values, that list shows customers, not segments): Format → **Markers → Color → fx** → Format style **Field value** → field `Customer Color` → OK. If **fx** is greyed out, remove `segment_name` from Legend; the segment slicer tiles act as the key.
+   - Why not `Segment Color`? A point filters `customers`, and filters only flow from `segments` to `customers`, so `Segment Color` would return its charcoal fallback for every point. `Customer Color` starts from the customer and looks up its segment with `RELATED`.
    - Axis titles: X *Buying and paying off ← → Borrowing and cash*; Y *Overall activity and size*.
    - With 8,949 points, Power BI may show a sample. That's fine for the picture.
+
+   **Check:** hovering over a point shows one customer ID; with no segment selected you see six colours; selecting *Light users* leaves only grey points.
 4. **Utilization distribution:** in the Data pane, right-click `customers[utilization]` → **New group** → Group type **Bin**, bin size **0.1**.
    Then a **Clustered column chart**: X-axis `utilization (bins)`, Y-axis `Customers`.
 5. **Least typical customers:** **Table** with `customer_id`, `segment_name`, `balance`, `credit_limit`, `utilization`, `cash_advance`, `distance_to_centre`.
@@ -283,4 +288,5 @@ You should be able to explain:
 - What a z-score in the profile matrix means, and why the heatmap uses one
 - The difference between `Median Utilization` and `Portfolio Utilization`
 - What `REMOVEFILTERS` and `SELECTEDVALUE` do in your measures
+- Why the scatter is coloured with `Customer Color` rather than `Segment Color` (filters flow from `segments` to `customers`, not back)
 - How you'd keep the segments up to date in production: re-assign customers monthly, refit yearly, track segment migration

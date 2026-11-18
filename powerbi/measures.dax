@@ -110,6 +110,13 @@ Segment Color =
 SELECTEDVALUE ( segments[color_hex], "#2C3E50" )
 
 // Format: Text
+// Colour for one customer's point in the segment scatter (page 3): Markers > Color > fx > Field value > Customer Color
+// Segment Color doesn't work there: each point filters customers, and filters don't flow back from customers to segments.
+// RELATED looks up the customer's own segment; with one customer per point, MAXX just returns that hex.
+Customer Color =
+MAXX ( customers, RELATED ( segments[color_hex] ) )
+
+// Format: Text
 // Dynamic page subtitle
 Selection Summary =
 VAR n = [Customers]

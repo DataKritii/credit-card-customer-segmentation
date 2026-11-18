@@ -58,10 +58,7 @@ Built from `powerbi/data/` using the [build guide](powerbi/POWERBI_BUILD_GUIDE.m
 | Personas & actions | Persona, suggested action and risk view for the selected segment, compared with all customers |
 | Method | Choosing k, stability and limitations |
 
-<!-- After building the report, add your screenshots here, e.g.:
-![Overview](reports/figures/powerbi_1_overview.png)
-![Segment profiles](reports/figures/powerbi_2_profiles.png)
--->
+![alt text](powerbi_1_overview.png) ![alt text](powerbi_2_segmentation.png) ![alt text](powerbi_3_segment_explorer.png) ![alt text](powerbi_4_persona.png) ![alt text](powerbi_5_method.png)
 
 **Data model:** a star schema. The `customers` fact table and the `segment_profile` table both link to the `segments` dimension; `segment_profile` also links to `metrics`.
 
